@@ -1,19 +1,28 @@
 import sys
 from itertools import * 
+import re 
 
 ##
 ## More memory used this way. most efficient way is to use simple math 
 ##
 
 def parse(puzzle_input):
+    regex = '^(\d*)-(\d*),(\d*)-(\d*)'
     pairs = [] 
     for l in puzzle_input:
-        parts = l.strip().split(',')
-        l1 = int(parts[0].split('-')[0])
-        l2 = int(parts[0].split('-')[1])
-        u1 = int(parts[1].split('-')[0])
-        u2 = int(parts[1].split('-')[1])
-        pairs.append(((l1, l2), (u1,u2)))
+        matches = re.match(regex, l)
+        pairs.append(
+                (
+                    ( 
+                        int(matches.group(1)) ,
+                        int(matches.group(2)) 
+                    ),
+                    (
+                        int(matches.group(3)) ,
+                        int(matches.group(4)) 
+                    )
+                )
+            )
     return pairs
 
 
