@@ -17,7 +17,6 @@ def parse(puzzle_input):
     return pairs
 
 
-
 def part1(data):
     """Solve part 1""" 
     wholly_contained_pairs = 0 
@@ -28,8 +27,6 @@ def part1(data):
         if len(r1 - r2) == 0 or len(r2-r1) == 0:
                 wholly_contained_pairs += 1
     return wholly_contained_pairs 
-
-
 
 def part2(data):
     """Solve part 2"""
