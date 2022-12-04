@@ -1,6 +1,10 @@
 import sys
 from itertools import * 
 
+##
+## More memory used this way. most efficient way is to use simple math 
+##
+
 def parse(puzzle_input):
     pairs = [] 
     for l in puzzle_input:
