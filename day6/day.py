@@ -5,16 +5,11 @@ def parse(puzzle_input):
     return puzzle_input[0]
 
 def signal(fixed_len, data):
-    """Solve part 1""" 
-    a = [None] * fixed_len
-
-    for index, c in enumerate(data):
-        a.insert(0,c)
-        a.pop()
-
-        if None not in a and fixed_len == len(a) == len(set(a)): 
-            return index + 1
-    
+    """Solve part 1"""     
+    for i in range(fixed_len, len(data)):
+        s = data[i - fixed_len: i ]
+        if len(s) == len(set(s)): 
+            return i
     return None
             
 def part1(data):
