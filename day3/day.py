@@ -56,6 +56,7 @@ if __name__ == "__main__":
         solution1 = part1(data)
         print("%s puzzle 1 : %s" % (path, solution1))
 
+        data = parse(puzzle_input)
         solution2 = part2(data)
         print("%s puzzle 2 : %s" % (path, solution2))
 

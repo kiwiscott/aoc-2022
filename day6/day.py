@@ -2,26 +2,29 @@ import sys
 from itertools import * 
 
 def parse(puzzle_input):
-    groups = []
-    collector = []
-    for n in puzzle_input: 
-        if(n != '\n'):
-            collector.append(int(n))
-        else:
-            groups.append(collector)
-            collector = [] 
-    return groups
+    return puzzle_input[0]
 
-
-def part1(data):
+def signal(fixed_len, data):
     """Solve part 1""" 
-    return max(map(sum,data))
+    a = [None] * fixed_len
 
+    for index, c in enumerate(data):
+        a.insert(0,c)
+        a.pop()
+
+        if None not in a and fixed_len == len(a) == len(set(a)): 
+            return index + 1
+    
+    return None
+            
+def part1(data):
+    """Solve part 2"""
+    return signal(4,data)
 
 def part2(data):
     """Solve part 2"""
-    last3 = sorted(map(sum,data))[-3:]
-    return sum(last3)
+    return signal(14,data)
+    
 
 if __name__ == "__main__":
     for path in sys.argv[1:]:
