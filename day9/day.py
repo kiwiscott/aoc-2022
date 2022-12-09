@@ -14,9 +14,6 @@ def move_head(direction,head):
     head[0] += 1 if direction == 'U' else -1 if  direction == 'D' else 0 
     head[1] += 1 if direction == 'R' else -1 if  direction == 'L' else 0 
 
-def sign(x):
-    return (x > 0) - (x < 0) # True = 1, False = 0
-
 def move_tail(k1,k2): 
     ##if the row and the colum is different but the gap for both is one do nothing 
     row_delta = k1[0] - k2[0]
