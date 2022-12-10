@@ -6,16 +6,14 @@ def parse(puzzle_input):
 
 def preprocess_instructions(data):
     instructions = [] 
-
     for ins in data: 
         ins = ins.strip()
         if ins == "noop":
             instructions.append(ins)
         elif ins.startswith("addx"):
-            instructions.append(ins.split()[0].strip())
-            instructions.append(ins.split()[1].strip())
+            instructions.append(ins.split()[0])
+            instructions.append(ins.split()[1])
     return instructions
-
 
 def run_all(instructions,during = None):
     xval = 1 
@@ -39,8 +37,6 @@ def part1(data):
         signal_strength += ccc *  run_all(instructions[:ccc-1])
     
     return signal_strength
-
-
 
 def part2(data):
     """Solve part 2"""
