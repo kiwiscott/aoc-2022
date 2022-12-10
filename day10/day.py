@@ -22,7 +22,7 @@ def run_all(instructions,during = None):
             during(i, xval)
         
         try:
-            xval += int(ival)
+            xval += int(ival) ### The sign was being dropped with is numeric so this is just as good for python
         except ValueError:
             None
 
@@ -33,9 +33,17 @@ def part1(data):
     cycles = [20, 60, 100, 140, 180, 220]
     instructions = preprocess_instructions(data)
     signal_strength = 0 
-    for ccc in cycles: 
-        signal_strength += ccc *  run_all(instructions[:ccc-1])
-    
+
+    #changed to callback after part 2 as it was just as easy
+    #and its more consistent 
+    def calc_strength(cycle,xval):
+        nonlocal signal_strength 
+        adj_cycle  = cycle +1
+        if adj_cycle in cycles:
+            signal_strength += adj_cycle * xval
+
+    run_all(instructions,calc_strength)
+
     return signal_strength
 
 def part2(data):
