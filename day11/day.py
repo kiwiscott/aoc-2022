@@ -2,74 +2,35 @@ import sys
 from itertools import * 
 import math
 
-def example_data():
-    monkey0 = Monkey(0,'old * 19', 23,2,3)
-    monkey0.addItems([79,98])
+def parse(input): 
+    monkeys = [] 
+    monkey = None
 
-    monkey1 =  Monkey(1,'old + 6', 19,2,0)
-    monkey1.addItems([54,65,75,74])
+    for line in input: 
+        line = line.strip()
+        if line.startswith("Monkey"): 
+            monkey= Monkey() 
+            monkeys.append(monkey)
+        elif line.startswith("Starting"): 
+            monkey.addItems(list(int(x) for x in line.split(':')[1].split(',')))
+        elif line.startswith("Operation"): 
+            monkey.operation = line.split('=')[1]
+        elif line.split(":")[0] == "Test":
+            monkey.test_divisor = int(line.split()[-1]) 
+        elif line.split(":")[0] == "If true":
+            monkey.when_true = int(line.split()[-1]) 
+        elif line.split(":")[0] == "If false":
+            monkey.when_false = int(line.split()[-1]) 
 
-    monkey2 =  Monkey(2,'old * old', 13,1,3)
-    monkey2.addItems([79,60,97])
-
-    monkey3 =  Monkey(3,'old + 3', 17,0,1)
-    monkey3.addItems([74])
-
-    monkeys = [ monkey0,
-         monkey1,
-         monkey2,
-         monkey3,
-    ]
     return monkeys
-def real_data(): 
-    monkey0 = Monkey(0,'old * 17', 2,2,6)
-    monkey0.addItems([85,79,63,72])
-
-    monkey1 = Monkey(1,'old * old', 7,0,2)
-    monkey1.addItems([53,94,65,81,93,73,57,92])
-
-    monkey2 = Monkey(2,'old + 7', 13,7,6)
-    monkey2.addItems([62,63])
-
-    monkey3 = Monkey(3,'old + 4', 5,4,5)
-    monkey3.addItems([57,92,56])
-
-    monkey4 = Monkey(4,'old + 5', 3,1,5)
-    monkey4.addItems([67])
-
-    monkey5 = Monkey(5,'old + 6', 19,1,0)
-    monkey5.addItems([85, 56, 66, 72, 57, 99])
-
-    monkey6 = Monkey(6,'old * 13', 11,3,7)
-    monkey6.addItems([86, 65, 98, 97, 69])
-
-    monkey7 = Monkey(7,'old + 2', 17,4,3)
-    monkey7.addItems([87, 68, 92, 66, 91, 50, 68])
-
-    monkeys = [ monkey0,
-         monkey1,
-         monkey2,
-         monkey3,
-         monkey4,
-         monkey5,
-         monkey6,
-         monkey7,
-    ]
-    return monkeys
-
-
-
-
     
-    return puzzle_input
 
 class Monkey:
-    def __init__(self, id, operation,test_divisor,when_true,when_false) -> None:
-        self.id = id
-        self.operation = operation
-        self.test_divisor = test_divisor
-        self.when_true = when_true 
-        self.when_false = when_false
+    def __init__(self) -> None:
+        self.operation = None
+        self.test_divisor = None
+        self.when_true = None 
+        self.when_false = None
         self.items = [] 
         self.inspections = 0 
     
@@ -128,22 +89,16 @@ def part2(monkeys):
     return flying_items(10000, lambda x: x % modulo)
 
 
-
 if __name__ == "__main__":
     for path in sys.argv[1:]:
-        if path == 'example':
-            data = example_data()
-        else:
-            data = real_data()
+        puzzle_input = open(path + '.txt').readlines()
+
+        data = parse(puzzle_input)
 
         solution1 = part1(data)
         print("%s puzzle 1 : %s" % (path, solution1))
 
-        if path == 'example':
-            data = example_data()
-        else:
-            data = real_data()
-    
+        data = parse(puzzle_input)
         solution2 = part2(data)
         print("%s puzzle 2 : %s" % (path, solution2))
 
