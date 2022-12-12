@@ -29,6 +29,7 @@ class Grid:
     def __init__(self,grid) -> None:
         self.grid = grid 
         self.allowed_neighbours = [(+1,0), (-1,0), (0,+1),(0,-1)] 
+        self.cost_so_far = dict()
     
     def data_at(self, row,col): 
         if row >= 0 and col >= 0: 
@@ -50,13 +51,16 @@ class Grid:
             if value_at and ord(value_at) <= ord(current) +1: 
                 yield (r,c)
     
-    def search(self,start,goal,max_steps):
+    def search(self,start,goal, reset=False):
+        if reset:
+            self.cost_so_far = dict() 
+
         frontier = deque()
         frontier.append(start)
         ##came_from =  dict()
-        cost_so_far =  dict()
+        ##cost_so_far =  dict()
         ##came_from[start] = None
-        cost_so_far[start] = 0
+        self.cost_so_far[start] = 0
         
         while True:
             try: 
@@ -68,14 +72,14 @@ class Grid:
                 continue
 
             for next in self.neighbors(current[0], current[1]): 
-                new_cost = cost_so_far[current] + 1
-                if new_cost < max_steps  and (next not in cost_so_far or  new_cost < cost_so_far[next]): 
-                    cost_so_far[next] = new_cost
+                new_cost = self.cost_so_far[current] + 1
+                if next not in self.cost_so_far or  new_cost < self.cost_so_far[next]: 
+                    self.cost_so_far[next] = new_cost
                     frontier.append(next)
                     ##came_from[next] = current
         
-        if goal in cost_so_far:
-            return cost_so_far[goal]
+        if goal in self.cost_so_far:
+            return self.cost_so_far[goal]
         else:
             return None
 
@@ -86,43 +90,30 @@ def data_at(coord,data):
 def part1(processed):
     (start,end,data) = processed
     grid = Grid(data)
-    cost_so_far = grid.search(start,end,max_steps = sys.maxsize)    
+    cost_so_far = grid.search(start,end,reset=True)    
     return cost_so_far
-
-
-
 
 def part2(processed):
     """Solve part 1"""
     (start,end,data) = processed
     grid = Grid(data)
 
-    
-
     ##sort the a's by the manhattan distance. In thoery we should try the closer ones to the end first 
     all_as = []
     for ridx in range(len(data)):
         for cidx in range(len(data[0])): 
-            if data[ridx][cidx] == 'a' and ridx !=0 and cidx !=0: 
-                manhattan = abs(end[0] - ridx) + abs(end[1] - cidx)
-                all_as.append((manhattan,ridx,cidx))
+            if data[ridx][cidx] == 'a':
+                all_as.append((ridx,cidx))
 
-    
-    all_as.sort()
+    ##we can use the already traversed map to see if there's a better way of getting there. 
+    ##There may be times when this docuesn't work but the brute force method (clearing out the mins steps to get to x takes 1000 times longer)
 
-    ##although we know the first path isn't optimal its a good max to tart with. 
-    ##
-    current_min = grid.search(start,end,max_steps = sys.maxsize)   
-
-    for a in all_as:
-        man, row,col = a
+    current_min = sys.maxsize
+    for row,col in all_as:
         new_start = (row,col)
-        cost_so_far = grid.search( new_start ,end,max_steps = current_min)
+        cost_so_far = grid.search( new_start ,end)
         if cost_so_far and cost_so_far < current_min:
             current_min = cost_so_far
-
-
-    
     return current_min
 
 
